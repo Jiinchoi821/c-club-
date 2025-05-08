@@ -1,0 +1,66 @@
+// C++ code
+//
+int EN1 = 5;
+int EN2 = 6;
+
+int IN1 = 2;
+int IN2 = 3;
+int IN3 = 7;
+int IN4 = 8;
+int trig = 10;
+int echo = 11;
+void setup()
+{
+  pinMode(EN1, OUTPUT);
+  pinMode(EN2, OUTPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(trig, OUTPUT);
+  pinMode(echo, INPUT);
+  Serial.begin(9600); 
+}
+
+void loop()
+{
+  long duration, distance;
+/*trig pin에 pluse를 만든다*/
+  digitalWrite(trig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig, LOW);
+
+/*echo pin으로 수신함*/
+  duration = pulseIn (echo, HIGH); 
+  distance = duration * 17 / 1000; // 수신거리를 cm로 변환 함
+
+  Serial.println(duration ); //초음파가 반사되어 돌아오는 시간을 보여줍니다.
+  Serial.print("\nDIstance : ");
+  Serial.print(distance); //측정된 물체로부터 거리값(cm값)을 보여줍니다.
+  Serial.println(" Cm");
+
+  if(distance <=20)
+{
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  analogWrite(EN1, 0);
+  delay(100); // Wait for 1000 millisecond(s)
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+  analogWrite(EN2, 0);
+  delay(100);
+}
+  else
+{
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  analogWrite(EN1, 250);
+  delay(100); // Wait for 1000 millisecond(s)
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+  analogWrite(EN2, 250);
+  delay(100);
+}
+}
